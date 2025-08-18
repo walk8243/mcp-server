@@ -18,7 +18,7 @@ server.tool(
 	"get_members",
 	"Get members of a generation and/or status",
 	{
-		generation: z.number().positive().describe("Generation of the member"),
+		generation: z.number().int().min(1).describe("Generation of the member"),
 		status: z.enum(["active", "graduated", "suspended"]).optional().describe("Status of the member"),
 	},
 	async ({ generation, status }) => {
