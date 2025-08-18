@@ -27,7 +27,7 @@ server.tool(
 				content: [
 					{
 						type: "text",
-						text: `Failed to get generation`,
+						text: `Failed to get generation and status. Please specify generation or status.`,
 					},
 				],
 			};
