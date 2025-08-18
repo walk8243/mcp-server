@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { getMembersByGeneration, Nogizaka46Member } from "./data/members.js";
+import { filterMembers, Nogizaka46Member } from "./data/members.js";
 
 // Create server instance
 const server = new McpServer({
@@ -16,12 +16,13 @@ const server = new McpServer({
 // Register nogizaka46 tools
 server.tool(
 	"get_members",
-	"Get members of a generation",
+	"Get members of a generation and/or status",
 	{
 		generation: z.number().positive().describe("Generation of the member"),
+		status: z.enum(["active", "graduated", "suspended"]).optional().describe("Status of the member"),
 	},
-	async ({ generation }) => {
-		if (!generation) {
+	async ({ generation, status }) => {
+		if (!generation && !status) {
 			return {
 				content: [
 					{
@@ -33,7 +34,7 @@ server.tool(
 		}
 
 		// Format Text
-		const formattedText = getMembersByGeneration(generation).map((member: Nogizaka46Member) =>
+		const formattedText = filterMembers({ generation, status }).map((member: Nogizaka46Member) =>
 			[
 				`${member.name || "Unknown"}:`,
 				`Name Kana: ${member.nameKana || "Unknown"}`,
