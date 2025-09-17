@@ -1,7 +1,12 @@
-from spire.pdf import PdfDocument, PdfTextExtractor, PdfTextExtractOptions
 import re
 
+from spire.pdf import PdfDocument, PdfTextExtractOptions, PdfTextExtractor
+
 PDF_PATH = "files/rulebook.pdf"
+WARNING_MESSAGE = (
+    "Evaluation Warning : The document was created with Spire.PDF for Python."
+)
+
 
 def include_pdf():
     """
@@ -11,11 +16,11 @@ def include_pdf():
         # PDFドキュメントを読み込む
         pdf_document = PdfDocument()
         pdf_document.LoadFromFile(PDF_PATH)
-        
+
         # テキスト抽出オプションを設定
         options = PdfTextExtractOptions()
         options.IsExtractAllText = True
-        
+
         # テキストを抽出
         extracted_text = ""
         print(pdf_document.Pages.Count)
@@ -23,31 +28,34 @@ def include_pdf():
             page = pdf_document.Pages[i]
             # PdfTextExtractorのインスタンスを作成
             text_extractor = PdfTextExtractor(page)
-            
+
             # 現在のページからテキストを抽出
             page_text = text_extractor.ExtractText(options)
-            
+
             # Spire.PDFの警告メッセージを除去
-            page_text = page_text.replace("Evaluation Warning : The document was created with Spire.PDF for Python.", "")
+            page_text = page_text.replace(
+                WARNING_MESSAGE,
+                "",
+            )
             # 複数の空白行を単一の空白行に置換
-            page_text = re.sub(r'\n\s*\n\s*\n+', '\n\n', page_text)
-            
+            page_text = re.sub(r"\n\s*\n\s*\n+", "\n\n", page_text)
+
             extracted_text += page_text
             extracted_text += "\n\n"  # ページ間の区切り
-        
+
         # テキストファイルとして保存
         output_path = "files/rulebook.txt"
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(extracted_text)
-        
+
         print(f"PDFをテキストに変換しました: {output_path}")
         print(f"抽出されたテキストの長さ: {len(extracted_text)} 文字")
-        
+
         # PDFドキュメントを閉じる
         pdf_document.Close()
-        
+
         return extracted_text
-        
+
     except Exception as e:
         print(f"エラーが発生しました: {str(e)}")
         return None

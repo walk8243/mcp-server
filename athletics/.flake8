@@ -1,0 +1,18 @@
+[flake8]
+# 1行の最大文字数を88文字に設定 (デフォルトは79)
+max-line-length = 88
+
+# 特定のファイルをチェック対象から除外
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+	output,
+    .venv
+
+# Blackとの競合回避: E203(スライス前の空白), W503(演算子前の改行)
+ignore = E203, W503
+
+max-complexity = 10
+max-cognitive-complexity = 6

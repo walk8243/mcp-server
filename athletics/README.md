@@ -34,8 +34,37 @@ uv sync
 
 3. サーバーを起動
 ```bash
-uv run python main.py
+uv run -m src.main
 ```
+
+## 開発
+
+### コードフォーマットとリント
+
+プロジェクトでは以下のツールを使用してコードの品質を保っています：
+
+#### isort（インポート文の整理）
+```bash
+uv run isort src/
+```
+
+#### black（コードフォーマット）
+```bash
+uv run black src/
+```
+
+#### flake8（リント）
+```bash
+uv run flake8 src/
+```
+
+### 開発時の推奨ワークフロー
+
+1. コードを編集
+2. isortでインポート文を整理
+3. blackでコードをフォーマット
+4. flake8でリントを実行
+5. 問題がなければコミット
 
 ## 使用方法
 
