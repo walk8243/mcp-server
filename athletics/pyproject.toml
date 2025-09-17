@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "This project utilizes RAG technology to provide information from the Athletics Rulebook as an MCP server."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "spire-pdf>=11.9.0",
+]
