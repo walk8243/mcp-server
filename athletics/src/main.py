@@ -6,12 +6,11 @@ def main():
     print("PDFをテキストに変換しています...")
 
     # PDFをテキストに変換
-    extracted_text = include_pdf()
-
-    if extracted_text:
+    try:
+        include_pdf()
         print("変換が完了しました！")
-    else:
-        print("変換に失敗しました。")
+    except Exception as e:
+        print(f"変換に失敗しました: {str(e)}")
 
 
 if __name__ == "__main__":
