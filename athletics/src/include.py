@@ -1,11 +1,8 @@
 import re
 
-from spire.pdf import PdfDocument, PdfTextExtractOptions, PdfTextExtractor
+import pdfplumber
 
 PDF_PATH = "files/rulebook.pdf"
-WARNING_MESSAGE = (
-    "Evaluation Warning : The document was created with Spire.PDF for Python."
-)
 
 
 def include_pdf():
@@ -14,34 +11,20 @@ def include_pdf():
     """
     try:
         # PDFドキュメントを読み込む
-        pdf_document = PdfDocument()
-        pdf_document.LoadFromFile(PDF_PATH)
+        with pdfplumber.open(PDF_PATH) as pdf:
+            # テキストを抽出
+            extracted_text = ""
+            print(f"総ページ数: {len(pdf.pages)}")
 
-        # テキスト抽出オプションを設定
-        options = PdfTextExtractOptions()
-        options.IsExtractAllText = True
+            for i, page in enumerate(pdf.pages):
+                # 現在のページからテキストを抽出
+                page_text = page.extract_text()
 
-        # テキストを抽出
-        extracted_text = ""
-        print(pdf_document.Pages.Count)
-        for i in range(pdf_document.Pages.Count):
-            page = pdf_document.Pages[i]
-            # PdfTextExtractorのインスタンスを作成
-            text_extractor = PdfTextExtractor(page)
-
-            # 現在のページからテキストを抽出
-            page_text = text_extractor.ExtractText(options)
-
-            # Spire.PDFの警告メッセージを除去
-            page_text = page_text.replace(
-                WARNING_MESSAGE,
-                "",
-            )
-            # 複数の空白行を単一の空白行に置換
-            page_text = re.sub(r"\n\s*\n\s*\n+", "\n\n", page_text)
-
-            extracted_text += page_text
-            extracted_text += "\n\n"  # ページ間の区切り
+                if page_text:
+                    # 複数の空白行を単一の空白行に置換
+                    page_text = re.sub(r"\n\s*\n\s*\n+", "\n\n", page_text)
+                    extracted_text += page_text
+                    extracted_text += "\n\n"  # ページ間の区切り
 
         # テキストファイルとして保存
         output_path = "files/rulebook.txt"
@@ -50,9 +33,6 @@ def include_pdf():
 
         print(f"PDFをテキストに変換しました: {output_path}")
         print(f"抽出されたテキストの長さ: {len(extracted_text)} 文字")
-
-        # PDFドキュメントを閉じる
-        pdf_document.Close()
 
         return extracted_text
 
