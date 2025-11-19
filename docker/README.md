@@ -2,18 +2,28 @@
 
 ## 使い方
 
+### Dockerのイメージのビルドと実行
+
+```bash
+# ビルド
+docker build -t docker-mcp-server .
+
+# 実行
+docker run -i --rm docker-mcp-server
+```
+
 ### Claude Desktopへの設定方法
 
 ```json
 {
   "mcpServers": {
-    "docker-mcp": {
+    "docker-mcp-server": {
       "command": "docker",
       "args": [
         "run",
         "-i",          // 標準入力を繋ぐために必須
         "--rm",        // 終了時にコンテナを削除
-        "my-mcp-server" // ビルドしたイメージ名
+        "docker-mcp-server" // ビルドしたイメージ名
       ]
     }
   }
