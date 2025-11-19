@@ -14,3 +14,5 @@ def include_pdf():
 
     # PDFドキュメントを読み込む
     pdf_reader.read_pdf()
+    
+    # pdf_reader.test_page()
